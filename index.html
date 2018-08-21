@@ -67,7 +67,7 @@ keys = ssh-in.dat</code></pre>
 ListenAddress 127.0.0.1</code></pre>
 <p>If you choose to use a port other than 22 for your SSH server, you will need to change the port in your i2p tunnel configuration.</p>
 <h2 id="step-three-set-up-i2p-tunnel-for-ssh-client">Step Three: Set up i2p tunnel for SSH Client</h2>
-<p>You will need to be able to see the i2p router console of the SSH server in order to configure your client connection.</p>
+<p>You will need to be able to see the i2p router console of the SSH server in order to configure your client connection. One neat thing about this setup is that the initial connection to the i2p tunnel is authenticated, somewhat reducing the risk of your initial connection to the SSH server being MITM'ed, as is a risk in Trust-On-First-Use scenarios.</p>
 <h3 id="using-java-i2p-1">Using Java i2p</h3>
 <h4 id="tunnel-wizard-1">Tunnel Wizard</h4>
 <p>First, start the tunnel configuration wizard from the hidden services manager and select a client tunnel.</p>
@@ -145,7 +145,7 @@ Host 127.0.0.1
 <img src="whitelistclient.png" alt="Get the client destination" />
 <p class="caption">Get the client destination</p>
 </div>
-<p>Add the client's base64 destination to the server's destination whitelist.</p>
+<p>Add the client's base64 destination to the server's destination whitelist. Now you'll only be able to connect to the server tunnel from that specific client tunnel and no one else will be able to connect to that destination. Mutual authentication FTW.</p>
 <div class="figure">
 <img src="whitelistserver.png" alt="And paste it onto the server&#39;s whitelist" />
 <p class="caption">And paste it onto the server's whitelist</p>
