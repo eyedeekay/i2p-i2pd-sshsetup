@@ -163,10 +163,66 @@ server, you should check the "Create persistent destination" radial button.
 
 ### Using i2pd
 
+You can set this up by adding the following lines to your tunnels.conf and
+adjust it for your performance/anonymity needs.
+
+```
+[SSH-CLIENT]
+type = client
+host = 127.0.0.1
+port = 7622
+inbound.length = 1
+outbound.length = 1
+inbound.quantity = 5
+outbound.quantity = 5
+inbound.backupQuantity = 2
+outbound.backupQuantity = 2
+i2cp.dontPublishLeaseSet = true
+destination = bubfjkl2l46pevgnh7yicm2e7rkld4jrgpmruw2ueqn5fa4ag6eq.b32.i2p
+keys = ssh-in.dat
+```
+
+### Restart the i2p router on the client
+
 Step Four: Set up SSH client
 ----------------------------
+
+There are lots of ways to set up an SSH client to connect to your server on i2p,
+but there are a few things you should do to secure your SSH client for anonymous
+use. First, you should configure it to only identify itself to SSH server with
+a single, specific key so that you don't risk contaminating your anonymous and
+non-anonymous SSH connections.
+
+Make sure your $HOME/.ssh/config contains the following lines:
+
+```
+IdentitiesOnly yes
+
+Host 127.0.0.1
+  IdentityFile ~/.ssh/login_id_ed25519
+```
+
+Alternatively, you could make a .bash\_alias entry to enforce your options and
+automatically connect to i2p. You get the idea, you need to enforce
+IdentitiesOnly and provide an identity file.
+
+```
+i2pssh() {
+    ssh -o IdentitiesOnly=yes -o IdentityFile=~/.ssh/login_id_ed25519 serveruser@127.0.0.1:7622
+}
+```
 
 #### Step Five: Whitelist only the client tunnel
 
 This is more-or-less optional, but it's pretty cool and will prevent anyone who
-happens to come across your destination
+happens to come across your destination from being able to tell you are hosting
+an SSH service.
+
+First, retrieve the persistent client tunnel destination and transmit it to the
+server.
+
+![Get the client destination](whitelistclient.png)
+
+Add the client's base64 destination to the server's destination whitelist.
+
+![And paste it onto the server's whitelist](whitelistserver.png)
