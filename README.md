@@ -111,7 +111,10 @@ Step Three: Set up i2p tunnel for SSH Client
 --------------------------------------------
 
 You will need to be able to see the i2p router console of the SSH server in
-order to configure your client connection.
+order to configure your client connection. One neat thing about this setup is
+that the initial connection to the i2p tunnel is authenticated, somewhat
+reducing the risk of your initial connection to the SSH server being MITM'ed,
+as is a risk in Trust-On-First-Use scenarios.
 
 ### Using Java i2p
 
@@ -224,6 +227,9 @@ server.
 
 ![Get the client destination](whitelistclient.png)
 
-Add the client's base64 destination to the server's destination whitelist.
+Add the client's base64 destination to the server's destination whitelist. Now
+you'll only be able to connect to the server tunnel from that specific client
+tunnel and no one else will be able to connect to that destination. Mutual
+authentication FTW.
 
 ![And paste it onto the server's whitelist](whitelistserver.png)
