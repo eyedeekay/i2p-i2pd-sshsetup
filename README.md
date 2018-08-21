@@ -61,6 +61,12 @@ to dial-it-in a bit.
 
 Finally, restart the tunnel so that all of your settings take effect.
 
+Another interesting setting, especially if you choose to run a high number of
+tunnels is "Reduce on Idle" which will reduce the number of tunnels that run
+when the serve has experienced extended inactivity.
+
+![Reduce on idle, if you chose a high number of tunnels](idlereduce.png)
+
 ### Using i2pd
 
 With i2pd, all configuration is done with files instead of via a web interface.
@@ -78,6 +84,7 @@ inbound.quantity = 5
 outbound.quantity = 5
 inbound.backupQuantity = 2
 outbound.backupQuantity = 2
+i2cp.reduceOnIdle = true
 keys =ssh-in.dat
 ```
 
@@ -105,6 +112,24 @@ Step Three: Set up i2p tunnel for SSH Client
 
 On the computer where you will be connecting, you will need to set up a client
 tunnel
+
+### Using Java i2p
+
+#### Tunnel Wizard
+
+![client](client.png)
+![standard](clientstandard.png)
+![describe](clientdescribe.png)
+![finddestination](finddestination.png)
+![fixdestination](fixdestination.png)
+![port](clientport.png)
+![autostart](clientautostart.png)
+
+#### Advanced Settings
+
+![interactive](clientinteractive.png)
+
+### Using i2pd
 
 Step Four: Set up SSH client
 ----------------------------
