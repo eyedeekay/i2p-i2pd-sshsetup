@@ -157,7 +157,8 @@ Decide whether you want it to start automatically.
 
 Like before, you'll want to change the settings to be optimized for interactive
 connections. Additionally, if you want to set up client whiteliting on the
-server, you should check the "Create persistent destination" radial button.
+server, you should check the "Generate key to enable persistent client tunnel
+identity" radial button.
 
 ![interactive](clientinteractive.png)
 
