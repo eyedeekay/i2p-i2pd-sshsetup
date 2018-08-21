@@ -25,5 +25,8 @@ css:
 	@echo 'h1 {' | tee -a index.html
 	@echo '    margin-left: 40px;' | tee -a index.html
 	@echo '}' | tee -a index.html
+	@echo 'img {' | tee -a index.html
+	@echo '    align: center;' | tee -a index.html
+	@echo '}' | tee -a index.html
 	@echo '</style>' | tee -a index.html
 
