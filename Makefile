@@ -30,3 +30,34 @@ css:
 	@echo '}' | tee -a index.html
 	@echo '</style>' | tee -a index.html
 
+network=si
+samhost=sam-host
+samport=7656
+args=-r
+
+docker-volume:
+	docker run -i -t -d \
+		--name sshsetup-volume \
+		--volume sshsetup:/home/eephttpd/ \
+		eyedeekay/eephttpd; true
+	make docker-copy
+	docker stop eephttpd-volume; true
+
+docker-run: docker-volume
+	docker rm -f eephttpd; true
+	docker run -i -t -d \
+		--network $(network) \
+		--env samhost=$(samhost) \
+		--env samport=$(samport) \
+		--env args=$(args) \
+		--network-alias sshsetup \
+		--hostname sshsetup \
+		--name sshsetup \
+		--restart always \
+		--volumes-from sshsetup-volume \
+		eyedeekay/eephttpd
+	docker rm -f eephttpd-volume; true
+	docker logs -f sshsetup
+
+docker-copy:
+	docker cp index.html sshsetup-volume:/opt/eephttpd/www/index.html
