@@ -150,11 +150,11 @@ your client device, then paste it into the client destination field.
 Lastly, set a local port to connect your ssh client to. This will local port
 will be connected to the base64 destination and thus the SSH server.
 
-![port](clientport.png)
+![Choose a local port](clientport.png)
 
 Decide whether you want it to start automatically.
 
-![autostart](clientautostart.png)
+![Decide if you want it to autostart](clientautostart.png)
 
 #### Advanced Settings
 
@@ -163,7 +163,7 @@ connections. Additionally, if you want to set up client whiteliting on the
 server, you should check the "Generate key to enable persistent client tunnel
 identity" radial button.
 
-![interactive](clientinteractive.png)
+![Configure it to be interactive](clientinteractive.png)
 
 ### Using i2pd
 
@@ -231,6 +231,6 @@ Add the client's base64 destination to the server's destination whitelist. Now
 you'll only be able to connect to the server tunnel from that specific client
 tunnel and no one else will be able to connect to that destination.
 
-![And paste it onto the server's whitelist](whitelistserver.png)
+![And paste it onto the server whitelist](whitelistserver.png)
 
 Mutual authentication FTW.
