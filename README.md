@@ -229,7 +229,8 @@ server.
 
 Add the client's base64 destination to the server's destination whitelist. Now
 you'll only be able to connect to the server tunnel from that specific client
-tunnel and no one else will be able to connect to that destination. Mutual
-authentication FTW.
+tunnel and no one else will be able to connect to that destination.
 
 ![And paste it onto the server's whitelist](whitelistserver.png)
+
+Mutual authentication FTW.
