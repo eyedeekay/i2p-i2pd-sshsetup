@@ -78,6 +78,7 @@ inbound.quantity = 5
 outbound.quantity = 5
 inbound.backupQuantity = 2
 outbound.backupQuantity = 2
+keys =ssh-in.dat
 ```
 
 ### Restart your i2p router
