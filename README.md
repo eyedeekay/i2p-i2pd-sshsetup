@@ -85,7 +85,7 @@ outbound.quantity = 5
 inbound.backupQuantity = 2
 outbound.backupQuantity = 2
 i2cp.reduceOnIdle = true
-keys =ssh-in.dat
+keys = ssh-in.dat
 ```
 
 ### Restart your i2p router
@@ -110,22 +110,54 @@ change the port in your i2p tunnel configuration.
 Step Three: Set up i2p tunnel for SSH Client
 --------------------------------------------
 
-On the computer where you will be connecting, you will need to set up a client
-tunnel
+You will need to be able to see the i2p router console of the SSH server in
+order to configure your client connection.
 
 ### Using Java i2p
 
 #### Tunnel Wizard
 
-![client](client.png)
-![standard](clientstandard.png)
-![describe](clientdescribe.png)
-![finddestination](finddestination.png)
-![fixdestination](fixdestination.png)
+First, start the tunnel configuration wizard from the hidden services manager
+and select a client tunnel.
+
+![Use the wizard to create a client tunnel](client.png)
+
+Next, select the standard tunnel type. You will fine-tune this configuration
+later.
+
+![Of the Standard variety](clientstandard.png)
+
+Give it a good description.
+
+![Give it a good description](clientdescribe.png)
+
+This is the only slightly tricky part. Go to the hidden services manager of the
+i2p router console and find the base64 "local destination" of the SSH server
+tunnel. You'll need to find a way to copy this information into the next step.
+I generally [Tox](https://tox.chat) it to myself, any off-the-record
+should be sufficient for most people.
+
+![Find the destination you want to connect to](finddestination.png)
+
+Once you've found the base64 destination you want to connect to transmitted to
+your client device, then paste it into the client destination field.
+
+![Affix the destination](fixdestination.png)
+
+Lastly, set a local port to connect your ssh client to. This will local port
+will be connected to the base64 destination and thus the SSH server.
+
 ![port](clientport.png)
+
+Decide whether you want it to start automatically.
+
 ![autostart](clientautostart.png)
 
 #### Advanced Settings
+
+Like before, you'll want to change the settings to be optimized for interactive
+connections. Additionally, if you want to set up client whiteliting on the
+server, you should check the "Create persistent destination" radial button.
 
 ![interactive](clientinteractive.png)
 
@@ -134,3 +166,7 @@ tunnel
 Step Four: Set up SSH client
 ----------------------------
 
+#### Step Five: Whitelist only the client tunnel
+
+This is more-or-less optional, but it's pretty cool and will prevent anyone who
+happens to come across your destination
