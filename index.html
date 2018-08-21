@@ -106,12 +106,47 @@ ListenAddress 127.0.0.1</code></pre>
 <p class="caption">autostart</p>
 </div>
 <h4 id="advanced-settings-1">Advanced Settings</h4>
-<p>Like before, you'll want to change the settings to be optimized for interactive connections. Additionally, if you want to set up client whiteliting on the server, you should check the &quot;Create persistent destination&quot; radial button.</p>
+<p>Like before, you'll want to change the settings to be optimized for interactive connections. Additionally, if you want to set up client whiteliting on the server, you should check the &quot;Generate key to enable persistent client tunnel identity&quot; radial button.</p>
 <div class="figure">
 <img src="clientinteractive.png" alt="interactive" />
 <p class="caption">interactive</p>
 </div>
 <h3 id="using-i2pd-1">Using i2pd</h3>
+<p>You can set this up by adding the following lines to your tunnels.conf and adjust it for your performance/anonymity needs.</p>
+<pre><code>[SSH-CLIENT]
+type = client
+host = 127.0.0.1
+port = 7622
+inbound.length = 1
+outbound.length = 1
+inbound.quantity = 5
+outbound.quantity = 5
+inbound.backupQuantity = 2
+outbound.backupQuantity = 2
+i2cp.dontPublishLeaseSet = true
+destination = bubfjkl2l46pevgnh7yicm2e7rkld4jrgpmruw2ueqn5fa4ag6eq.b32.i2p
+keys = ssh-in.dat</code></pre>
+<h3 id="restart-the-i2p-router-on-the-client">Restart the i2p router on the client</h3>
 <h2 id="step-four-set-up-ssh-client">Step Four: Set up SSH client</h2>
+<p>There are lots of ways to set up an SSH client to connect to your server on i2p, but there are a few things you should do to secure your SSH client for anonymous use. First, you should configure it to only identify itself to SSH server with a single, specific key so that you don't risk contaminating your anonymous and non-anonymous SSH connections.</p>
+<p>Make sure your $HOME/.ssh/config contains the following lines:</p>
+<pre><code>IdentitiesOnly yes
+
+Host 127.0.0.1
+  IdentityFile ~/.ssh/login_id_ed25519</code></pre>
+<p>Alternatively, you could make a .bash_alias entry to enforce your options and automatically connect to i2p. You get the idea, you need to enforce IdentitiesOnly and provide an identity file.</p>
+<pre><code>i2pssh() {
+    ssh -o IdentitiesOnly=yes -o IdentityFile=~/.ssh/login_id_ed25519 serveruser@127.0.0.1:7622
+}</code></pre>
 <h4 id="step-five-whitelist-only-the-client-tunnel">Step Five: Whitelist only the client tunnel</h4>
-<p>This is more-or-less optional, but it's pretty cool and will prevent anyone who happens to come across your destination</p>
+<p>This is more-or-less optional, but it's pretty cool and will prevent anyone who happens to come across your destination from being able to tell you are hosting an SSH service.</p>
+<p>First, retrieve the persistent client tunnel destination and transmit it to the server.</p>
+<div class="figure">
+<img src="whitelistclient.png" alt="Get the client destination" />
+<p class="caption">Get the client destination</p>
+</div>
+<p>Add the client's base64 destination to the server's destination whitelist.</p>
+<div class="figure">
+<img src="whitelistserver.png" alt="And paste it onto the server&#39;s whitelist" />
+<p class="caption">And paste it onto the server's whitelist</p>
+</div>
