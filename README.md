@@ -74,19 +74,17 @@ In order to configure an SSH Service tunnel for i2pd, tweak the following
 example settings to your anonymity and performance needs and copy them into
 tunnels.conf
 
-```
-[SSH-SERVER]
-type = server
-port = 22
-inbound.length = 1
-outbound.length = 1
-inbound.quantity = 5
-outbound.quantity = 5
-inbound.backupQuantity = 2
-outbound.backupQuantity = 2
-i2cp.reduceOnIdle = true
-keys = ssh-in.dat
-```
+        [SSH-SERVER]
+        type = server
+        port = 22
+        inbound.length = 1
+        outbound.length = 1
+        inbound.quantity = 5
+        outbound.quantity = 5
+        inbound.backupQuantity = 2
+        outbound.backupQuantity = 2
+        i2cp.reduceOnIdle = true
+        keys = ssh-in.dat
 
 ### Restart your i2p router
 
@@ -99,10 +97,8 @@ on all SSH servers(Public-Key Authentication, no login as root, etc), if you
 don't want your SSH server to listen on any addresses except your server tunnel,
 you should change AddressFamily to inet and ListenAddress to 127.0.0.1.
 
-```
-AddressFamily inet
-ListenAddress 127.0.0.1
-```
+        AddressFamily inet
+        ListenAddress 127.0.0.1
 
 If you choose to use a port other than 22 for your SSH server, you will need to
 change the port in your i2p tunnel configuration.
@@ -170,21 +166,19 @@ identity" radial button.
 You can set this up by adding the following lines to your tunnels.conf and
 adjust it for your performance/anonymity needs.
 
-```
-[SSH-CLIENT]
-type = client
-host = 127.0.0.1
-port = 7622
-inbound.length = 1
-outbound.length = 1
-inbound.quantity = 5
-outbound.quantity = 5
-inbound.backupQuantity = 2
-outbound.backupQuantity = 2
-i2cp.dontPublishLeaseSet = true
-destination = bubfjkl2l46pevgnh7yicm2e7rkld4jrgpmruw2ueqn5fa4ag6eq.b32.i2p
-keys = ssh-in.dat
-```
+        [SSH-CLIENT]
+        type = client
+        host = 127.0.0.1
+        port = 7622
+        inbound.length = 1
+        outbound.length = 1
+        inbound.quantity = 5
+        outbound.quantity = 5
+        inbound.backupQuantity = 2
+        outbound.backupQuantity = 2
+        i2cp.dontPublishLeaseSet = true
+        destination = bubfjkl2l46pevgnh7yicm2e7rkld4jrgpmruw2ueqn5fa4ag6eq.b32.i2p
+        keys = ssh-in.dat
 
 ### Restart the i2p router on the client
 
@@ -199,22 +193,18 @@ non-anonymous SSH connections.
 
 Make sure your $HOME/.ssh/config contains the following lines:
 
-```
-IdentitiesOnly yes
+        IdentitiesOnly yes
 
-Host 127.0.0.1
-  IdentityFile ~/.ssh/login_id_ed25519
-```
+        Host 127.0.0.1
+          IdentityFile ~/.ssh/login_id_ed25519
 
 Alternatively, you could make a .bash\_alias entry to enforce your options and
 automatically connect to i2p. You get the idea, you need to enforce
 IdentitiesOnly and provide an identity file.
 
-```
-i2pssh() {
-    ssh -o IdentitiesOnly=yes -o IdentityFile=~/.ssh/login_id_ed25519 serveruser@127.0.0.1:7622
-}
-```
+        i2pssh() {
+            ssh -o IdentitiesOnly=yes -o IdentityFile=~/.ssh/login_id_ed25519 serveruser@127.0.0.1:7622
+        }
 
 #### Step Five: Whitelist only the client tunnel
 

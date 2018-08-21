@@ -1,153 +1,242 @@
-<h1 id="how-to-set-up-an-ssh-server-behind-i2p-for-personal-access">How to set up an ssh server behind i2p for personal access</h1>
-<p>This is a tutorial on how to set up and tweak an i2p tunnel in order to use it to access an SSH server remotely, using either i2p or i2pd. For now, it assumes you will install your SSH server from a package manager and that it's running as a service.</p>
-<p>Considerations: In this guide, I'm assuming a few things. They will need to be adjusted depending on the complications that arise in your particular setup, especially if you use VM's or containers for isolation. This assumes that the i2p router and the ssh server are running on the same localhost.</p>
-<h2 id="step-one-set-up-i2p-tunnel-for-ssh-server">Step One: Set up i2p tunnel for SSH Server</h2>
-<h3 id="using-java-i2p">Using Java i2p</h3>
-<p>Using java i2p's web interface, navigate to the (Links to your Router Console)<a href="http://127.0.0.1:7657/i2ptunnelmgr">Hidden Services Manager</a> and start the tunnel wizard.</p>
-<h4 id="tunnel-wizard">Tunnel Wizard</h4>
-<p>Since you are setting up this tunnel for the SSH server, you need to select the &quot;Server&quot; tunnel type.</p>
-<div class="figure">
-<img src="server.png" alt="Use the wizard to create a &quot;Server&quot; tunnel" />
-<p class="caption">Use the wizard to create a &quot;Server&quot; tunnel</p>
-</div>
-<p>You should fine-tune it later, but the Standard tunnel type is easiest to start with.</p>
-<div class="figure">
-<img src="standard.png" alt="Of the &quot;Standard&quot; variety" />
-<p class="caption">Of the &quot;Standard&quot; variety</p>
-</div>
-<p>Give it a good description:</p>
-<div class="figure">
-<img src="describe.png" alt="Describe what it is for" />
-<p class="caption">Describe what it is for</p>
-</div>
-<p>And tell it where the SSH server will be available.</p>
-<div class="figure">
-<img src="hostport.png" alt="Point it at the future home of your SSH server" />
-<p class="caption">Point it at the future home of your SSH server</p>
-</div>
-<p>Look over the results, and save your settings.</p>
-<div class="figure">
-<img src="approve.png" alt="Save the settings." />
-<p class="caption">Save the settings.</p>
-</div>
-<h4 id="advanced-settings">Advanced Settings</h4>
-<p>Now head back over the the Hidden Services Manager, and look over the available advanced settings. One thing you'll definitely want to change is to set it up for interactive connections intstead of bulk connections.</p>
-<div class="figure">
-<img src="interactive.png" alt="Configure your tunnel for interactive connectionss" />
-<p class="caption">Configure your tunnel for interactive connectionss</p>
-</div>
-<p>Besides that, these other options can affect performance when accessing your SSH server. If you aren't that concerned about your anonymity, then you could reduce the number of hops you take. If you have trouble with speed, a higher tunnel count might help. A few backup tunnels are probably a good idea. You might have to dial-it-in a bit.</p>
-<div class="figure">
-<img src="anonlevel.png" alt="If you&#39;re not concerned about anonymity, then reduce tunnel length." />
-<p class="caption">If you're not concerned about anonymity, then reduce tunnel length.</p>
-</div>
-<p>Finally, restart the tunnel so that all of your settings take effect.</p>
-<p>Another interesting setting, especially if you choose to run a high number of tunnels is &quot;Reduce on Idle&quot; which will reduce the number of tunnels that run when the serve has experienced extended inactivity.</p>
-<div class="figure">
-<img src="idlereduce.png" alt="Reduce on idle, if you chose a high number of tunnels" />
-<p class="caption">Reduce on idle, if you chose a high number of tunnels</p>
-</div>
-<h3 id="using-i2pd">Using i2pd</h3>
-<p>With i2pd, all configuration is done with files instead of via a web interface. In order to configure an SSH Service tunnel for i2pd, tweak the following example settings to your anonymity and performance needs and copy them into tunnels.conf</p>
-<pre><code>[SSH-SERVER]
-type = server
-port = 22
-inbound.length = 1
-outbound.length = 1
-inbound.quantity = 5
-outbound.quantity = 5
-inbound.backupQuantity = 2
-outbound.backupQuantity = 2
-i2cp.reduceOnIdle = true
-keys = ssh-in.dat</code></pre>
-<h3 id="restart-your-i2p-router">Restart your i2p router</h3>
-<h2 id="step-two-set-up-ssh-server">Step Two: Set up SSH server</h2>
-<p>Depending on how you want to access your SSH Server, you may want to make a few changes to the settings. Besides the obvious SSH hardening stuff you should do on all SSH servers(Public-Key Authentication, no login as root, etc), if you don't want your SSH server to listen on any addresses except your server tunnel, you should change AddressFamily to inet and ListenAddress to 127.0.0.1.</p>
-<pre><code>AddressFamily inet
-ListenAddress 127.0.0.1</code></pre>
-<p>If you choose to use a port other than 22 for your SSH server, you will need to change the port in your i2p tunnel configuration.</p>
-<h2 id="step-three-set-up-i2p-tunnel-for-ssh-client">Step Three: Set up i2p tunnel for SSH Client</h2>
-<p>You will need to be able to see the i2p router console of the SSH server in order to configure your client connection. One neat thing about this setup is that the initial connection to the i2p tunnel is authenticated, somewhat reducing the risk of your initial connection to the SSH server being MITM'ed, as is a risk in Trust-On-First-Use scenarios.</p>
-<h3 id="using-java-i2p-1">Using Java i2p</h3>
-<h4 id="tunnel-wizard-1">Tunnel Wizard</h4>
-<p>First, start the tunnel configuration wizard from the hidden services manager and select a client tunnel.</p>
-<div class="figure">
-<img src="client.png" alt="Use the wizard to create a client tunnel" />
-<p class="caption">Use the wizard to create a client tunnel</p>
-</div>
-<p>Next, select the standard tunnel type. You will fine-tune this configuration later.</p>
-<div class="figure">
-<img src="clientstandard.png" alt="Of the Standard variety" />
-<p class="caption">Of the Standard variety</p>
-</div>
-<p>Give it a good description.</p>
-<div class="figure">
-<img src="clientdescribe.png" alt="Give it a good description" />
-<p class="caption">Give it a good description</p>
-</div>
-<p>This is the only slightly tricky part. Go to the hidden services manager of the i2p router console and find the base64 &quot;local destination&quot; of the SSH server tunnel. You'll need to find a way to copy this information into the next step. I generally <a href="https://tox.chat">Tox</a> it to myself, any off-the-record should be sufficient for most people.</p>
-<div class="figure">
-<img src="finddestination.png" alt="Find the destination you want to connect to" />
-<p class="caption">Find the destination you want to connect to</p>
-</div>
-<p>Once you've found the base64 destination you want to connect to transmitted to your client device, then paste it into the client destination field.</p>
-<div class="figure">
-<img src="fixdestination.png" alt="Affix the destination" />
-<p class="caption">Affix the destination</p>
-</div>
-<p>Lastly, set a local port to connect your ssh client to. This will local port will be connected to the base64 destination and thus the SSH server.</p>
-<div class="figure">
-<img src="clientport.png" alt="Choose a local port" />
-<p class="caption">Choose a local port</p>
-</div>
-<p>Decide whether you want it to start automatically.</p>
-<div class="figure">
-<img src="clientautostart.png" alt="Decide if you want it to autostart" />
-<p class="caption">Decide if you want it to autostart</p>
-</div>
-<h4 id="advanced-settings-1">Advanced Settings</h4>
-<p>Like before, you'll want to change the settings to be optimized for interactive connections. Additionally, if you want to set up client whiteliting on the server, you should check the &quot;Generate key to enable persistent client tunnel identity&quot; radial button.</p>
-<div class="figure">
-<img src="clientinteractive.png" alt="Configure it to be interactive" />
-<p class="caption">Configure it to be interactive</p>
-</div>
-<h3 id="using-i2pd-1">Using i2pd</h3>
-<p>You can set this up by adding the following lines to your tunnels.conf and adjust it for your performance/anonymity needs.</p>
-<pre><code>[SSH-CLIENT]
-type = client
-host = 127.0.0.1
-port = 7622
-inbound.length = 1
-outbound.length = 1
-inbound.quantity = 5
-outbound.quantity = 5
-inbound.backupQuantity = 2
-outbound.backupQuantity = 2
-i2cp.dontPublishLeaseSet = true
-destination = bubfjkl2l46pevgnh7yicm2e7rkld4jrgpmruw2ueqn5fa4ag6eq.b32.i2p
-keys = ssh-in.dat</code></pre>
-<h3 id="restart-the-i2p-router-on-the-client">Restart the i2p router on the client</h3>
-<h2 id="step-four-set-up-ssh-client">Step Four: Set up SSH client</h2>
-<p>There are lots of ways to set up an SSH client to connect to your server on i2p, but there are a few things you should do to secure your SSH client for anonymous use. First, you should configure it to only identify itself to SSH server with a single, specific key so that you don't risk contaminating your anonymous and non-anonymous SSH connections.</p>
-<p>Make sure your $HOME/.ssh/config contains the following lines:</p>
-<pre><code>IdentitiesOnly yes
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Configuring an SSH server on i2p</title>
+ </head>
+<body>
+<h1>How to set up an ssh server behind i2p for personal access</h1>
 
-Host 127.0.0.1
-  IdentityFile ~/.ssh/login_id_ed25519</code></pre>
-<p>Alternatively, you could make a .bash_alias entry to enforce your options and automatically connect to i2p. You get the idea, you need to enforce IdentitiesOnly and provide an identity file.</p>
-<pre><code>i2pssh() {
-    ssh -o IdentitiesOnly=yes -o IdentityFile=~/.ssh/login_id_ed25519 serveruser@127.0.0.1:7622
-}</code></pre>
-<h4 id="step-five-whitelist-only-the-client-tunnel">Step Five: Whitelist only the client tunnel</h4>
-<p>This is more-or-less optional, but it's pretty cool and will prevent anyone who happens to come across your destination from being able to tell you are hosting an SSH service.</p>
-<p>First, retrieve the persistent client tunnel destination and transmit it to the server.</p>
-<div class="figure">
-<img src="whitelistclient.png" alt="Get the client destination" />
-<p class="caption">Get the client destination</p>
-</div>
-<p>Add the client's base64 destination to the server's destination whitelist. Now you'll only be able to connect to the server tunnel from that specific client tunnel and no one else will be able to connect to that destination.</p>
-<div class="figure">
-<img src="whitelistserver.png" alt="And paste it onto the server whitelist" />
-<p class="caption">And paste it onto the server whitelist</p>
-</div>
+<p>This is a tutorial on how to set up and tweak an i2p tunnel in order to use it
+to access an SSH server remotely, using either i2p or i2pd. For now, it assumes
+you will install your SSH server from a package manager and that it's running
+as a service.</p>
+
+<p>Considerations: In this guide, I'm assuming a few things. They will need to be
+adjusted depending on the complications that arise in your particular setup,
+especially if you use VM's or containers for isolation. This assumes that the
+i2p router and the ssh server are running on the same localhost.</p>
+
+<h2>Step One: Set up i2p tunnel for SSH Server</h2>
+
+<h3>Using Java i2p</h3>
+
+<p>Using java i2p's web interface, navigate to the (Links to your Router Console)<a href="http://127.0.0.1:7657/i2ptunnelmgr">Hidden Services Manager</a>
+and start the tunnel wizard.</p>
+
+<h4>Tunnel Wizard</h4>
+
+<p>Since you are setting up this tunnel for the SSH server, you need to select the
+"Server" tunnel type.</p>
+
+<p><img src="server.png" alt="Use the wizard to create a &quot;Server&quot; tunnel" title="" /></p>
+
+<p>You should fine-tune it later, but the Standard tunnel type is easiest to start
+with.</p>
+
+<p><img src="standard.png" alt="Of the &quot;Standard&quot; variety" title="" /></p>
+
+<p>Give it a good description:</p>
+
+<p><img src="describe.png" alt="Describe what it is for" title="" /></p>
+
+<p>And tell it where the SSH server will be available.</p>
+
+<p><img src="hostport.png" alt="Point it at the future home of your SSH server" title="" /></p>
+
+<p>Look over the results, and save your settings.</p>
+
+<p><img src="approve.png" alt="Save the settings." title="" /></p>
+
+<h4>Advanced Settings</h4>
+
+<p>Now head back over the the Hidden Services Manager, and look over the available
+advanced settings. One thing you'll definitely want to change is to set it up
+for interactive connections intstead of bulk connections.</p>
+
+<p><img src="interactive.png" alt="Configure your tunnel for interactive connectionss" title="" /></p>
+
+<p>Besides that, these other options can affect performance when accessing your SSH
+server. If you aren't that concerned about your anonymity, then you could reduce
+the number of hops you take. If you have trouble with speed, a higher tunnel
+count might help. A few backup tunnels are probably a good idea. You might have
+to dial-it-in a bit.</p>
+
+<p><img src="anonlevel.png" alt="If you're not concerned about anonymity, then reduce tunnel length." title="" /></p>
+
+<p>Finally, restart the tunnel so that all of your settings take effect.</p>
+
+<p>Another interesting setting, especially if you choose to run a high number of
+tunnels is "Reduce on Idle" which will reduce the number of tunnels that run
+when the serve has experienced extended inactivity.</p>
+
+<p><img src="idlereduce.png" alt="Reduce on idle, if you chose a high number of tunnels" title="" /></p>
+
+<h3>Using i2pd</h3>
+
+<p>With i2pd, all configuration is done with files instead of via a web interface.
+In order to configure an SSH Service tunnel for i2pd, tweak the following
+example settings to your anonymity and performance needs and copy them into
+tunnels.conf</p>
+
+<pre><code>    [SSH-SERVER]
+    type = server
+    port = 22
+    inbound.length = 1
+    outbound.length = 1
+    inbound.quantity = 5
+    outbound.quantity = 5
+    inbound.backupQuantity = 2
+    outbound.backupQuantity = 2
+    i2cp.reduceOnIdle = true
+    keys = ssh-in.dat
+</code></pre>
+
+<h3>Restart your i2p router</h3>
+
+<h2>Step Two: Set up SSH server</h2>
+
+<p>Depending on how you want to access your SSH Server, you may want to make a few
+changes to the settings. Besides the obvious SSH hardening stuff you should do
+on all SSH servers(Public-Key Authentication, no login as root, etc), if you
+don't want your SSH server to listen on any addresses except your server tunnel,
+you should change AddressFamily to inet and ListenAddress to 127.0.0.1.</p>
+
+<pre><code>    AddressFamily inet
+    ListenAddress 127.0.0.1
+</code></pre>
+
+<p>If you choose to use a port other than 22 for your SSH server, you will need to
+change the port in your i2p tunnel configuration.</p>
+
+<h2>Step Three: Set up i2p tunnel for SSH Client</h2>
+
+<p>You will need to be able to see the i2p router console of the SSH server in
+order to configure your client connection. One neat thing about this setup is
+that the initial connection to the i2p tunnel is authenticated, somewhat
+reducing the risk of your initial connection to the SSH server being MITM'ed,
+as is a risk in Trust-On-First-Use scenarios.</p>
+
+<h3>Using Java i2p</h3>
+
+<h4>Tunnel Wizard</h4>
+
+<p>First, start the tunnel configuration wizard from the hidden services manager
+and select a client tunnel.</p>
+
+<p><img src="client.png" alt="Use the wizard to create a client tunnel" title="" /></p>
+
+<p>Next, select the standard tunnel type. You will fine-tune this configuration
+later.</p>
+
+<p><img src="clientstandard.png" alt="Of the Standard variety" title="" /></p>
+
+<p>Give it a good description.</p>
+
+<p><img src="clientdescribe.png" alt="Give it a good description" title="" /></p>
+
+<p>This is the only slightly tricky part. Go to the hidden services manager of the
+i2p router console and find the base64 "local destination" of the SSH server
+tunnel. You'll need to find a way to copy this information into the next step.
+I generally <a href="https://tox.chat">Tox</a> it to myself, any off-the-record
+should be sufficient for most people.</p>
+
+<p><img src="finddestination.png" alt="Find the destination you want to connect to" title="" /></p>
+
+<p>Once you've found the base64 destination you want to connect to transmitted to
+your client device, then paste it into the client destination field.</p>
+
+<p><img src="fixdestination.png" alt="Affix the destination" title="" /></p>
+
+<p>Lastly, set a local port to connect your ssh client to. This will local port
+will be connected to the base64 destination and thus the SSH server.</p>
+
+<p><img src="clientport.png" alt="Choose a local port" title="" /></p>
+
+<p>Decide whether you want it to start automatically.</p>
+
+<p><img src="clientautostart.png" alt="Decide if you want it to autostart" title="" /></p>
+
+<h4>Advanced Settings</h4>
+
+<p>Like before, you'll want to change the settings to be optimized for interactive
+connections. Additionally, if you want to set up client whiteliting on the
+server, you should check the "Generate key to enable persistent client tunnel
+identity" radial button.</p>
+
+<p><img src="clientinteractive.png" alt="Configure it to be interactive" title="" /></p>
+
+<h3>Using i2pd</h3>
+
+<p>You can set this up by adding the following lines to your tunnels.conf and
+adjust it for your performance/anonymity needs.</p>
+
+<pre><code>    [SSH-CLIENT]
+    type = client
+    host = 127.0.0.1
+    port = 7622
+    inbound.length = 1
+    outbound.length = 1
+    inbound.quantity = 5
+    outbound.quantity = 5
+    inbound.backupQuantity = 2
+    outbound.backupQuantity = 2
+    i2cp.dontPublishLeaseSet = true
+    destination = bubfjkl2l46pevgnh7yicm2e7rkld4jrgpmruw2ueqn5fa4ag6eq.b32.i2p
+    keys = ssh-in.dat
+</code></pre>
+
+<h3>Restart the i2p router on the client</h3>
+
+<h2>Step Four: Set up SSH client</h2>
+
+<p>There are lots of ways to set up an SSH client to connect to your server on i2p,
+but there are a few things you should do to secure your SSH client for anonymous
+use. First, you should configure it to only identify itself to SSH server with
+a single, specific key so that you don't risk contaminating your anonymous and
+non-anonymous SSH connections.</p>
+
+<p>Make sure your $HOME/.ssh/config contains the following lines:</p>
+
+<pre><code>    IdentitiesOnly yes
+
+    Host 127.0.0.1
+      IdentityFile ~/.ssh/login_id_ed25519
+</code></pre>
+
+<p>Alternatively, you could make a .bash_alias entry to enforce your options and
+automatically connect to i2p. You get the idea, you need to enforce
+IdentitiesOnly and provide an identity file.</p>
+
+<pre><code>    i2pssh() {
+        ssh -o IdentitiesOnly=yes -o IdentityFile=~/.ssh/login_id_ed25519 serveruser@127.0.0.1:7622
+    }
+</code></pre>
+
+<h4>Step Five: Whitelist only the client tunnel</h4>
+
+<p>This is more-or-less optional, but it's pretty cool and will prevent anyone who
+happens to come across your destination from being able to tell you are hosting
+an SSH service.</p>
+
+<p>First, retrieve the persistent client tunnel destination and transmit it to the
+server.</p>
+
+<p><img src="whitelistclient.png" alt="Get the client destination" title="" /></p>
+
+<p>Add the client's base64 destination to the server's destination whitelist. Now
+you'll only be able to connect to the server tunnel from that specific client
+tunnel and no one else will be able to connect to that destination.</p>
+
+<p><img src="whitelistserver.png" alt="And paste it onto the server whitelist" title="" /></p>
+
 <p>Mutual authentication FTW.</p>
+<style>
+body {
+    background-color: linen;
+}
+h1 {
+    margin-left: 40px;
+}
+</style>
+</body>
+</html>
