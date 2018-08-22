@@ -16,7 +16,17 @@ as a service.</p>
 <p>Considerations: In this guide, I'm assuming a few things. They will need to be
 adjusted depending on the complications that arise in your particular setup,
 especially if you use VM's or containers for isolation. This assumes that the
-i2p router and the ssh server are running on the same localhost.</p>
+i2p router and the ssh server are running on the same localhost. You should be
+using newly-generated SSH host keys, either by using a freshly installed sshd,
+or by deleting old keys and forcing their re-generation. For example:</p>
+
+<pre><code>    sudo service openssh stop
+    sudo rm -f /etc/ssh/ssh_host_*
+    sudo ssh-keygen -N "" -t rsa -f /etc/ssh/ssh_host_rsa_key
+    sudo ssh-keygen -N "" -t dsa -f /etc/ssh/ssh_host_dsa_key
+    sudo ssh-keygen -N "" -t ecdsa -f /etc/ssh/ssh_host_ecdsa_key
+    sudo ssh-keygen -N "" -t ed25519 -f /etc/ssh/ssh_host_ed25519_key
+</code></pre>
 
 <h2>Step One: Set up i2p tunnel for SSH Server</h2>
 
