@@ -1,7 +1,7 @@
 How to set up an ssh server behind i2p for personal access
 ==========================================================
 
-[This guide is also available in i2p: qxixnfcsqvy3ecom2d2eec7mzvrnqmqkamqgwy5scoefpgjtx4na.b32.i2p](qxixnfcsqvy3ecom2d2eec7mzvrnqmqkamqgwy5scoefpgjtx4na.b32.i2p)
+[This guide is also available in i2p: 566niximlxdzpanmn4qouucvua3k7neniwss47li5r6ugoertzuq.b32.i2p](http://566niximlxdzpanmn4qouucvua3k7neniwss47li5r6ugoertzuq.b32.i2p)
 
 This is a tutorial on how to set up and tweak an i2p tunnel in order to use it
 to access an SSH server remotely, using either i2p or i2pd. For now, it assumes
