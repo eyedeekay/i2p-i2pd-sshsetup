@@ -61,5 +61,5 @@ docker-run: docker-volume
 	docker logs -f sshsetup
 
 docker-copy:
-	docker cp index.html sshsetup-volume:/opt/eephttpd/www/index.html; true
-	docker cp index.html sshsetup:/opt/eephttpd/www/index.html; true
+	docker cp ./* sshsetup-volume:/opt/eephttpd/www/index.html; true
+	docker cp ./* sshsetup:/opt/eephttpd/www/index.html; true
