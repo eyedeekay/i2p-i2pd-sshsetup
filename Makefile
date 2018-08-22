@@ -56,8 +56,7 @@ docker-run: docker-volume
 		--restart always \
 		--volumes-from sshsetup-volume \
 		eyedeekay/eephttpd
-	docker cp index.html sshsetup:/opt/eephttpd/www/index.html
-	docker rm -f eephttpd-volume; true
+	make docker-copy
 	docker logs -f sshsetup
 
 docker-copy:
