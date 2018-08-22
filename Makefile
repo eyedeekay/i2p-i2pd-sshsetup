@@ -64,4 +64,4 @@ docker-copy:
 	docker cp ./ sshsetup:/opt/eephttpd/www/; true
 
 visit:
-	http_proxy=http://127.0.0.1:44443 surf 566niximlxdzpanmn4qouucvua3k7neniwss47li5r6ugoertzuq.b32.i2p
+	http_proxy=http://127.0.0.1:44443 surf http://566niximlxdzpanmn4qouucvua3k7neniwss47li5r6ugoertzuq.b32.i2p
