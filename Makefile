@@ -4,6 +4,20 @@ index: header body css footer
 body:
 	markdown README.md | tee -a index.html
 
+rst:
+	@echo '.. meta::' | tee README.rst
+	@echo '    :author: idk' | tee -a README.rst
+	@echo '    :date: 2019-06-14' | tee -a README.rst
+	@echo '    :excerpt: Offering an I2P Mirror' | tee -a README.rst
+	@echo '' | tee -a README.rst
+	torst README.md | tee -a README.rst
+
+blog:
+	mkdir -p $(HOME)/Workspace/desktop-Workspace/mtn/i2p.www/i2p2www/blog/2019/06/14
+	cp README.rst $(HOME)/Workspace/desktop-Workspace/mtn/i2p.www/i2p2www/blog/2019/06/14/i2p-i2pd-ssh-config.rst
+	cp _static/images/*.png $(HOME)/Workspace/desktop-Workspace/mtn/i2p.www/i2p2www/static/images
+
+
 header:
 	rm -f index.html
 	@echo '<!DOCTYPE html>' | tee -a index.html
