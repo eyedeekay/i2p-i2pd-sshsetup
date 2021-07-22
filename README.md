@@ -33,24 +33,24 @@ and start the tunnel wizard.
 Since you are setting up this tunnel for the SSH server, you need to select the
 "Server" tunnel type.
 
-![Use the wizard to create a "Server" tunnel](_static/images/server.png)
+![Use the wizard to create a "Server" tunnel](server.png)
 
 You should fine-tune it later, but the Standard tunnel type is easiest to start
 with.
 
-![Of the "Standard" variety](_static/images/standard.png)
+![Of the "Standard" variety](standard.png)
 
 Give it a good description:
 
-![Describe what it is for](_static/images/describe.png)
+![Describe what it is for](describe.png)
 
 And tell it where the SSH server will be available.
 
-![Point it at the future home of your SSH server](_static/images/hostport.png)
+![Point it at the future home of your SSH server](hostport.png)
 
 Look over the results, and save your settings.
 
-![Save the settings.](_static/images/approve.png)
+![Save the settings.](approve.png)
 
 #### Advanced Settings
 
@@ -58,7 +58,7 @@ Now head back over the the Hidden Services Manager, and look over the available
 advanced settings. One thing you'll definitely want to change is to set it up
 for interactive connections intstead of bulk connections.
 
-![Configure your tunnel for interactive connectionss](_static/images/interactive.png)
+![Configure your tunnel for interactive connectionss](interactive.png)
 
 Besides that, these other options can affect performance when accessing your SSH
 server. If you aren't that concerned about your anonymity, then you could reduce
@@ -66,7 +66,7 @@ the number of hops you take. If you have trouble with speed, a higher tunnel
 count might help. A few backup tunnels are probably a good idea. You might have
 to dial-it-in a bit.
 
-![If you're not concerned about anonymity, then reduce tunnel length.](_static/images/anonlevel.png)
+![If you're not concerned about anonymity, then reduce tunnel length.](anonlevel.png)
 
 Finally, restart the tunnel so that all of your settings take effect.
 
@@ -74,7 +74,7 @@ Another interesting setting, especially if you choose to run a high number of
 tunnels is "Reduce on Idle" which will reduce the number of tunnels that run
 when the serve has experienced extended inactivity.
 
-![Reduce on idle, if you chose a high number of tunnels](_static/images/idlereduce.png)
+![Reduce on idle, if you chose a high number of tunnels](idlereduce.png)
 
 ### Using i2pd
 
@@ -128,16 +128,16 @@ as is a risk in Trust-On-First-Use scenarios.
 First, start the tunnel configuration wizard from the hidden services manager
 and select a client tunnel.
 
-![Use the wizard to create a client tunnel](_static/images/client.png)
+![Use the wizard to create a client tunnel](client.png)
 
 Next, select the standard tunnel type. You will fine-tune this configuration
 later.
 
-![Of the Standard variety](_static/images/clientstandard.png)
+![Of the Standard variety](clientstandard.png)
 
 Give it a good description.
 
-![Give it a good description](_static/images/clientdescribe.png)
+![Give it a good description](clientdescribe.png)
 
 This is the only slightly tricky part. Go to the hidden services manager of the
 i2p router console and find the base64 "local destination" of the SSH server
@@ -145,21 +145,21 @@ tunnel. You'll need to find a way to copy this information into the next step.
 I generally [Tox](https://tox.chat) it to myself, any off-the-record
 should be sufficient for most people.
 
-![Find the destination you want to connect to](_static/images/finddestination.png)
+![Find the destination you want to connect to](finddestination.png)
 
 Once you've found the base64 destination you want to connect to transmitted to
 your client device, then paste it into the client destination field.
 
-![Affix the destination](_static/images/fixdestination.png)
+![Affix the destination](fixdestination.png)
 
 Lastly, set a local port to connect your ssh client to. This will local port
 will be connected to the base64 destination and thus the SSH server.
 
-![Choose a local port](_static/images/clientport.png)
+![Choose a local port](clientport.png)
 
 Decide whether you want it to start automatically.
 
-![Decide if you want it to autostart](_static/images/clientautostart.png)
+![Decide if you want it to autostart](clientautostart.png)
 
 ### Advanced Settings
 
@@ -168,7 +168,7 @@ connections. Additionally, if you want to set up client allowlisting on the
 server, you should check the "Generate key to enable persistent client tunnel
 identity" radial button.
 
-![Configure it to be interactive](_static/images/clientinteractive.png)
+![Configure it to be interactive](clientinteractive.png)
 
 #### Using i2pd
 
@@ -225,12 +225,12 @@ an SSH service.
 First, retrieve the persistent client tunnel destination and transmit it to the
 server.
 
-![Get the client destination](_static/images/whitelistclient.png)
+![Get the client destination](whitelistclient.png)
 
 Add the client's base64 destination to the server's destination allow list. Now
 you'll only be able to connect to the server tunnel from that specific client
 tunnel and no one else will be able to connect to that destination.
 
-![And paste it onto the server whitelist](_static/images/whitelistserver.png)
+![And paste it onto the server whitelist](whitelistserver.png)
 
 Mutual authentication FTW.
