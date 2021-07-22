@@ -2,7 +2,16 @@
 index: header body css footer
 
 body:
-	markdown README.md | tee -a index.html
+	@echo "<!DOCTYPE html>" > index.html
+	@echo "<html>" >> index.html
+	@echo "<head>" >> index.html
+	@echo "  <title>Universal SSH over I2P Instructions</title>" >> index.html
+	@echo "  <link rel=\"stylesheet\" type=\"text/css\" href=\"home.css\" />" >> index.html
+	@echo "</head>" >> index.html
+	@echo "<body>" >> index.html
+	pandoc README.md >> index.html
+	@echo "</body>" >> index.html
+	@echo "</html>" >> index.html
 
 rst:
 	@echo '.. meta::' | tee README.rst
@@ -32,17 +41,6 @@ footer:
 	@echo '</html>' | tee -a index.html
 
 css:
-	@echo '<style>' | tee -a index.html
-	@echo 'body {' | tee -a index.html
-	@echo '    background-color: linen;' | tee -a index.html
-	@echo '}' | tee -a index.html
-	@echo 'h1 {' | tee -a index.html
-	@echo '    margin-left: 40px;' | tee -a index.html
-	@echo '}' | tee -a index.html
-	@echo 'img {' | tee -a index.html
-	@echo '    align: center;' | tee -a index.html
-	@echo '}' | tee -a index.html
-	@echo '</style>' | tee -a index.html
 
 network=si
 samhost=sam-host
