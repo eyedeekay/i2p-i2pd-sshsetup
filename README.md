@@ -164,7 +164,7 @@ Decide whether you want it to start automatically.
 ### Advanced Settings
 
 Like before, you'll want to change the settings to be optimized for interactive
-connections. Additionally, if you want to set up client whiteliting on the
+connections. Additionally, if you want to set up client allowlisting on the
 server, you should check the "Generate key to enable persistent client tunnel
 identity" radial button.
 
@@ -215,8 +215,8 @@ IdentitiesOnly and provide an identity file.
             ssh -o IdentitiesOnly=yes -o IdentityFile=~/.ssh/login_id_ed25519 serveruser@127.0.0.1:7622
         }
 
-Step Five: Whitelist only the client tunnel
--------------------------------------------
+Step Five: Allow only the client tunnel
+---------------------------------------
 
 This is more-or-less optional, but it's pretty cool and will prevent anyone who
 happens to come across your destination from being able to tell you are hosting
@@ -227,7 +227,7 @@ server.
 
 ![Get the client destination](_static/images/whitelistclient.png)
 
-Add the client's base64 destination to the server's destination whitelist. Now
+Add the client's base64 destination to the server's destination allow list. Now
 you'll only be able to connect to the server tunnel from that specific client
 tunnel and no one else will be able to connect to that destination.
 
